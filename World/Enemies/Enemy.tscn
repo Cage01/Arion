@@ -1,0 +1,93 @@
+[gd_scene load_steps=11 format=3 uid="uid://b3w3vvf1hj5v7"]
+
+[ext_resource type="Script" path="res://World/Enemies/Enemy.gd" id="1_h0y7l"]
+[ext_resource type="Texture2D" uid="uid://cbkuo5ovqeeiu" path="res://Exclude/Imported/AssetPacks/Tiny RPG Character Asset Pack v1.03 -Full 20 Characters/Characters(100x100)/Slime/Slime with shadows/Slime-Walk.png" id="2_tukxx"]
+[ext_resource type="PackedScene" uid="uid://7xx335lgqenk" path="res://Core/Scenes/Hurtbox.tscn" id="3_2yo1o"]
+[ext_resource type="PackedScene" uid="uid://c7b73oy7pxjg5" path="res://Core/Scenes/Hitbox.tscn" id="4_eprck"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_43st6"]
+radius = 6.25
+height = 12.5
+
+[sub_resource type="Animation" id="Animation_hqm7g"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.001),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+
+[sub_resource type="Animation" id="Animation_b0jk2"]
+resource_name = "walk"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.133333, 0.266667, 0.4, 0.533333, 0.666667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_niy55"]
+_data = {
+"RESET": SubResource("Animation_hqm7g"),
+"walk": SubResource("Animation_b0jk2")
+}
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_q44me"]
+radius = 8.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_our0n"]
+size = Vector2(24, 9)
+
+[node name="enemy_slime" type="CharacterBody2D"]
+motion_mode = 1
+script = ExtResource("1_h0y7l")
+movement_speed = 20.0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_tukxx")
+hframes = 6
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(1, 1)
+scale = Vector2(0.8, 0.8)
+shape = SubResource("CapsuleShape2D_43st6")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_niy55")
+}
+
+[node name="Hurtbox" parent="." instance=ExtResource("3_2yo1o")]
+collision_layer = 4
+collision_mask = 4
+
+[node name="CollisionShape2D" parent="Hurtbox" index="0"]
+position = Vector2(2, 2)
+shape = SubResource("CircleShape2D_q44me")
+
+[node name="Hitbox" parent="." instance=ExtResource("4_eprck")]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" parent="Hitbox" index="0"]
+position = Vector2(1, 3)
+shape = SubResource("RectangleShape2D_our0n")
+
+[connection signal="hurt" from="Hurtbox" to="." method="_on_hurtbox_hurt"]
+
+[editable path="Hurtbox"]
+[editable path="Hitbox"]
