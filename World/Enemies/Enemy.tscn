@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" path="res://World/Enemies/Enemy.gd" id="1_h0y7l"]
 [ext_resource type="Texture2D" uid="uid://cbkuo5ovqeeiu" path="res://Textures/Slime/Slime with shadows/Slime-Walk.png" id="2_tukxx"]
-[ext_resource type="PackedScene" uid="uid://7xx335lgqenk" path="res://Core/Scenes/Hurtbox.tscn" id="3_2yo1o"]
+[ext_resource type="PackedScene" uid="uid://7xx335lgqenk" path="res://Core/Collision/Hurtbox.tscn" id="3_2yo1o"]
 [ext_resource type="Texture2D" uid="uid://du3irixkugn5a" path="res://Textures/Slime/Slime with shadows/Slime-Hurt.png" id="3_el35d"]
 [ext_resource type="Texture2D" uid="uid://cp4bq1jlev2kc" path="res://Textures/Slime/Slime/Slime-Death.png" id="4_4jepn"]
-[ext_resource type="PackedScene" uid="uid://c7b73oy7pxjg5" path="res://Core/Scenes/Hitbox.tscn" id="4_eprck"]
+[ext_resource type="PackedScene" uid="uid://cgpiyd1okrjcf" path="res://Core/Collision/Hitbox.tscn" id="4_eprck"]
 [ext_resource type="AudioStream" uid="uid://duj0fq4acdpy8" path="res://Sound Effects/RPG_Essentials_Free/10_Battle_SFX/15_Impact_flesh_02.wav" id="6_2hl40"]
 [ext_resource type="AudioStream" uid="uid://nf0271t43b8e" path="res://Sound Effects/RPG_Essentials_Free/10_Battle_SFX/69_Enemy_death_01.wav" id="8_7cowq"]
 

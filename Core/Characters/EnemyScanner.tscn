@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cbs8rsd15ptsb"]
 
-[ext_resource type="Script" path="res://Core/Scripts/EnemyScanner.gd" id="1_4sfna"]
+[ext_resource type="Script" path="res://Core/Characters/EnemyScanner.gd" id="1_4sfna"]
 
 [node name="Area2D" type="Area2D"]
 collision_layer = 4
