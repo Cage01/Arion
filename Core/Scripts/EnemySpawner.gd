@@ -26,7 +26,7 @@ func _on_timer_timeout() -> void:
 
 
 func get_random_position():
-	var vpr = get_viewport_rect().size * randf_range(1.1, 1.4)
+	var vpr = get_viewport_rect().size * randf_range(1.4, 1.7)
 	
 	var player_x = player.global_position.x
 	var player_y = player.global_position.y

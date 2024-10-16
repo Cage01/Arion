@@ -27,6 +27,13 @@ display_server/layer_3=""
 display_server/layer_2=""
 display_server/layer_1=""
 
+[file_customization]
+
+folder_colors={
+"res://Core/": "purple",
+"res://Textures/": "red"
+}
+
 [input]
 
 up={

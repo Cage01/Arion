@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://cbjpyuys24lkl"
+path="res://.godot/imported/39_Absorb_04.wav-5324871b612832f3cd3403b08168d0d8.sample"
+
+[deps]
+
+source_file="res://Sound Effects/RPG_Essentials_Free/8_Buffs_Heals_SFX/39_Absorb_04.wav"
+dest_files=["res://.godot/imported/39_Absorb_04.wav-5324871b612832f3cd3403b08168d0d8.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

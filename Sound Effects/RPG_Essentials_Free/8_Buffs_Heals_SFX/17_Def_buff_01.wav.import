@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://cbs0vps3ocs75"
+path="res://.godot/imported/17_Def_buff_01.wav-3ac352424c5772628e4dec76e52e0ddf.sample"
+
+[deps]
+
+source_file="res://Sound Effects/RPG_Essentials_Free/8_Buffs_Heals_SFX/17_Def_buff_01.wav"
+dest_files=["res://.godot/imported/17_Def_buff_01.wav-3ac352424c5772628e4dec76e52e0ddf.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

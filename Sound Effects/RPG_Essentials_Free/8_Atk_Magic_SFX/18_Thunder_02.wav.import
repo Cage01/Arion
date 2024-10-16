@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://bcwwnpta5keji"
+path="res://.godot/imported/18_Thunder_02.wav-88e67cccf9a41d71e30afa4f143343ca.sample"
+
+[deps]
+
+source_file="res://Sound Effects/RPG_Essentials_Free/8_Atk_Magic_SFX/18_Thunder_02.wav"
+dest_files=["res://.godot/imported/18_Thunder_02.wav-88e67cccf9a41d71e30afa4f143343ca.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0
