@@ -2,9 +2,9 @@
 
 [ext_resource type="Texture2D" uid="uid://bwuco8mog1j4e" path="res://World/TX Tileset Grass.png" id="1_v2t5k"]
 [ext_resource type="Texture2D" uid="uid://dwtwf7x2v5vqc" path="res://World/overworld_tileset_grass.png" id="2_sjuys"]
-[ext_resource type="PackedScene" uid="uid://ciyt162x4iyi4" path="res://Core/Characters/Player.tscn" id="2_ymfbx"]
+[ext_resource type="PackedScene" uid="uid://ciyt162x4iyi4" path="res://Core/Characters/Scenes/Player.tscn" id="2_ymfbx"]
 [ext_resource type="PackedScene" uid="uid://b3w3vvf1hj5v7" path="res://World/Enemies/Enemy.tscn" id="3_jq4nk"]
-[ext_resource type="PackedScene" uid="uid://bopv2xn7ljb5s" path="res://Core/Characters/EnemySpawner.tscn" id="5_0hxk5"]
+[ext_resource type="PackedScene" uid="uid://bopv2xn7ljb5s" path="res://Core/Characters/Scenes/EnemySpawner.tscn" id="5_0hxk5"]
 [ext_resource type="AudioStream" uid="uid://bbn64cg7s4tbv" path="res://Music/DavidKBD - InterstellarPack - 06 - Hope on the Horizon.ogg" id="5_dd2ac"]
 [ext_resource type="Script" path="res://Data/spawn_data.gd" id="6_x0hdy"]
 
