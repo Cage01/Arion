@@ -1,6 +1,6 @@
-[gd_scene load_steps=17 format=3 uid="uid://b3w3vvf1hj5v7"]
+[gd_scene load_steps=22 format=3 uid="uid://b3w3vvf1hj5v7"]
 
-[ext_resource type="Script" path="res://World/Enemies/Enemy.gd" id="1_h0y7l"]
+[ext_resource type="Script" path="res://Core/Characters/Scripts/Enemy.gd" id="1_h0y7l"]
 [ext_resource type="Texture2D" uid="uid://cbkuo5ovqeeiu" path="res://Textures/Slime/Slime with shadows/Slime-Walk.png" id="2_tukxx"]
 [ext_resource type="PackedScene" uid="uid://7xx335lgqenk" path="res://Core/Collision/Scenes/Hurtbox.tscn" id="3_2yo1o"]
 [ext_resource type="Texture2D" uid="uid://du3irixkugn5a" path="res://Textures/Slime/Slime with shadows/Slime-Hurt.png" id="3_el35d"]
@@ -8,10 +8,15 @@
 [ext_resource type="PackedScene" uid="uid://cgpiyd1okrjcf" path="res://Core/Collision/Scenes/Hitbox.tscn" id="4_eprck"]
 [ext_resource type="AudioStream" uid="uid://duj0fq4acdpy8" path="res://Sound Effects/RPG_Essentials_Free/10_Battle_SFX/15_Impact_flesh_02.wav" id="6_2hl40"]
 [ext_resource type="AudioStream" uid="uid://nf0271t43b8e" path="res://Sound Effects/RPG_Essentials_Free/10_Battle_SFX/69_Enemy_death_01.wav" id="8_7cowq"]
+[ext_resource type="Script" path="res://Core/States/StateController.gd" id="9_axqnn"]
+[ext_resource type="Script" path="res://Core/States/StateMachine.gd" id="9_nh2g8"]
+[ext_resource type="Script" path="res://Core/States/EnemyChase.gd" id="10_0lsf5"]
+[ext_resource type="Script" path="res://Core/States/Death.gd" id="12_t2p38"]
+[ext_resource type="Script" path="res://Core/States/Hurt.gd" id="13_xjggt"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_43st6"]
-radius = 6.25
-height = 12.5
+radius = 3.75
+height = 7.5
 
 [sub_resource type="Animation" id="Animation_pvbkl"]
 resource_name = "Death"
@@ -169,12 +174,10 @@ _data = {
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_0sa5p"]
 radius = 6.0
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_our0n"]
-size = Vector2(24, 9)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8pl7w"]
+radius = 6.0
 
 [node name="enemy_slime" type="CharacterBody2D"]
-collision_layer = 4
-collision_mask = 4
 motion_mode = 1
 script = ExtResource("1_h0y7l")
 movement_speed = 20.0
@@ -197,8 +200,7 @@ texture = ExtResource("4_4jepn")
 hframes = 4
 
 [node name="Collision" type="CollisionShape2D" parent="."]
-visible = false
-position = Vector2(1, 1)
+position = Vector2(2, 2)
 scale = Vector2(0.8, 0.8)
 shape = SubResource("CapsuleShape2D_43st6")
 
@@ -208,6 +210,7 @@ libraries = {
 }
 
 [node name="Hurtbox" parent="." instance=ExtResource("3_2yo1o")]
+visible = false
 collision_layer = 4
 collision_mask = 4
 
@@ -220,20 +223,42 @@ shape = SubResource("CapsuleShape2D_0sa5p")
 visible = false
 collision_layer = 2
 collision_mask = 2
+knockback_amount = 20
 
 [node name="CollisionShape2D" parent="Hitbox" index="0"]
-position = Vector2(1, 3)
-shape = SubResource("RectangleShape2D_our0n")
+position = Vector2(0, 2)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_8pl7w")
 
-[node name="Audio_Hurt" type="AudioStreamPlayer2D" parent="."]
+[node name="Audio_Hurt" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("6_2hl40")
 volume_db = 5.0
 
-[node name="Audio_Death" type="AudioStreamPlayer2D" parent="."]
+[node name="Audio_Death" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("8_7cowq")
 
+[node name="State Controller" type="Node" parent="."]
+script = ExtResource("9_axqnn")
+
+[node name="State Machine" type="Node" parent="." node_paths=PackedStringArray("initial_state", "state_controller")]
+script = ExtResource("9_nh2g8")
+initial_state = NodePath("EnemyChase")
+state_controller = NodePath("../State Controller")
+
+[node name="EnemyChase" type="Node" parent="State Machine"]
+script = ExtResource("10_0lsf5")
+
+[node name="Hurt" type="Node" parent="State Machine"]
+script = ExtResource("13_xjggt")
+owner_type = "Enemy"
+
+[node name="Death" type="Node" parent="State Machine"]
+script = ExtResource("12_t2p38")
+
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
-[connection signal="hurt" from="Hurtbox" to="." method="_on_hurtbox_hurt"]
+[connection signal="hurt_triggered" from="Hurtbox" to="." method="_on_hurtbox_hurt_triggered"]
+[connection signal="StateFinished" from="State Machine" to="." method="_on_state_machine_state_finished"]
+[connection signal="StateStarted" from="State Machine" to="." method="_on_state_machine_state_started"]
 
 [editable path="Hurtbox"]
 [editable path="Hitbox"]

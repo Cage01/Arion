@@ -1,25 +1,20 @@
 extends CharacterBody2D
 
-
 class_name SpawnedUnit
 
 @export var movement_speed = 40.0
 @export var health = 20
 @export var knockback_recovery = 3.5
 
-var is_attacking = false
-var is_taking_damage = false
-var is_dying = false
-
-var knockback = Vector2.ZERO
+var _collision_disabled = false
 
 func _physics_process(_delta: float) -> void:
-	knockback = knockback.move_toward(Vector2.ZERO, knockback_recovery)
-	velocity = knockback
+	pass
+
 
 func _on_hurtbox_hurt(damage, angle, knockback_amount) -> void:
-	knockback = angle * knockback_amount
-	health -= damage
+	pass
+
 	
 func play_anim(player: AnimationPlayer, sprite: Sprite2D, anim_name: String, stop_prev: bool = false):
 	show_sprite(sprite)
@@ -60,3 +55,18 @@ func frame_freeze(duration: float, time_scale: float = 0):
 	Engine.time_scale = time_scale
 	await(get_tree().create_timer(duration, true, false, true).timeout)
 	Engine.time_scale = 1.0	
+	
+func disable_collision():
+	if !_collision_disabled:
+		for child in get_children():
+			
+			if child is CollisionShape2D:
+				child.disabled = true
+			elif (child.name.to_lower() == "hurtbox" || child.name.to_lower() == "hitbox"):
+				child.call_deferred("set", "disabled", "true")
+				
+				for j in child.get_children():
+					if j is CollisionShape2D:
+						j.disabled = true
+						
+		_collision_disabled = true

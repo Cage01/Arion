@@ -5,7 +5,7 @@ extends Area2D
 @onready var collision = $CollisionShape2D
 @onready var disableTimer = $DisableTimer
 
-signal hurt(damage, angle, knockback)
+signal hurt_triggered(damage, angle, knockback)
 
 
 func _on_area_entered(area: Area2D) -> void:
@@ -32,7 +32,7 @@ func _on_area_entered(area: Area2D) -> void:
 			if not area.get("knockback_amount") == null:
 				knockback = area.knockback_amount
 			
-			hurt.emit(damage, angle, knockback)
+			hurt_triggered.emit(damage, angle, knockback)
 
 func _on_disable_timer_timeout() -> void:
 	collision.call_deferred("set","disabled",false)

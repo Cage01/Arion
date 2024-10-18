@@ -1,7 +1,8 @@
-[gd_scene load_steps=22 format=3 uid="uid://ciyt162x4iyi4"]
+[gd_scene load_steps=29 format=3 uid="uid://ciyt162x4iyi4"]
 
 [ext_resource type="Script" path="res://Core/Characters/Scripts/Player.gd" id="1_kru7u"]
 [ext_resource type="Texture2D" uid="uid://cbk4e83aqj4hv" path="res://Textures/Knight with shadows/Knight-Idle.png" id="2_ercsl"]
+[ext_resource type="Script" path="res://Core/Characters/Scripts/CharacterData.gd" id="2_pm2tt"]
 [ext_resource type="Texture2D" uid="uid://bp2fke8nw3s1a" path="res://Textures/Knight with shadows/Knight-Walk.png" id="3_qvsn3"]
 [ext_resource type="Texture2D" uid="uid://byeoi2b1mxxtr" path="res://Textures/Knight with shadows/Knight-Attack01.png" id="4_hvdnx"]
 [ext_resource type="PackedScene" uid="uid://7xx335lgqenk" path="res://Core/Collision/Scenes/Hurtbox.tscn" id="4_o6dv5"]
@@ -11,7 +12,13 @@
 [ext_resource type="AudioStream" uid="uid://cwh7ehots6jr7" path="res://Sound Effects/RPG_Essentials_Free/12_Player_Movement_SFX/61_Hit_03.wav" id="10_emf0q"]
 [ext_resource type="AudioStream" uid="uid://duj0fq4acdpy8" path="res://Sound Effects/RPG_Essentials_Free/10_Battle_SFX/15_Impact_flesh_02.wav" id="11_vmxvh"]
 [ext_resource type="PackedScene" uid="uid://cbs8rsd15ptsb" path="res://Core/Characters/Scenes/EnemyScanner.tscn" id="12_odtc6"]
+[ext_resource type="Script" path="res://Core/States/StateController.gd" id="13_c42po"]
 [ext_resource type="AudioStream" uid="uid://bcb83hwkxy5fy" path="res://Sound Effects/RPG_Essentials_Free/12_Player_Movement_SFX/03_Step_grass_03.wav" id="13_i00ml"]
+[ext_resource type="Script" path="res://Core/States/StateMachine.gd" id="14_iekl7"]
+[ext_resource type="Script" path="res://Core/States/Death.gd" id="15_el3ca"]
+[ext_resource type="Script" path="res://Core/States/PlayerAttack.gd" id="16_r21cm"]
+[ext_resource type="Script" path="res://Core/States/Hurt.gd" id="17_yqinc"]
+[ext_resource type="Script" path="res://Core/States/PlayerDefault.gd" id="18_fmlpe"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_2btvo"]
 radius = 7.0
@@ -78,7 +85,7 @@ tracks/3/keys = {
 
 [sub_resource type="Animation" id="Animation_4f5oh"]
 resource_name = "Hurt"
-length = 0.3
+length = 0.2
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -86,7 +93,7 @@ tracks/0/path = NodePath("Sprites/S_Hurt:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.133333, 0.266667),
+"times": PackedFloat32Array(0, 0.0666667, 0.133333),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
 "values": [1, 2, 3]
@@ -272,6 +279,9 @@ _data = {
 script = ExtResource("1_kru7u")
 movement_speed = 60.0
 
+[node name="CharacterData" type="Node" parent="."]
+script = ExtResource("2_pm2tt")
+
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(0.7, 0.7)
 
@@ -287,6 +297,7 @@ collision_mask = 2
 shape = SubResource("CapsuleShape2D_qnfa7")
 
 [node name="Hitbox" parent="." instance=ExtResource("5_ot3rm")]
+visible = false
 collision_layer = 4
 collision_mask = 4
 damage = 10
@@ -296,19 +307,10 @@ knockback_amount = 120
 shape = SubResource("RectangleShape2D_ijccn")
 disabled = true
 
-[node name="Hitbox" parent="Hitbox" instance=ExtResource("5_ot3rm")]
-collision_layer = 4
-collision_mask = 4
-damage = 10
-knockback_amount = 120
-
-[node name="CollisionShape2D" parent="Hitbox/Hitbox" index="0"]
-shape = SubResource("RectangleShape2D_ijccn")
-disabled = true
-
 [node name="Sprites" type="Sprite2D" parent="."]
 
 [node name="S_Attack01" type="Sprite2D" parent="Sprites"]
+visible = false
 texture = ExtResource("4_hvdnx")
 hframes = 7
 
@@ -318,7 +320,6 @@ texture = ExtResource("3_qvsn3")
 hframes = 8
 
 [node name="S_Idle" type="Sprite2D" parent="Sprites"]
-visible = false
 texture = ExtResource("2_ercsl")
 hframes = 6
 
@@ -328,17 +329,21 @@ texture = ExtResource("7_eld7e")
 hframes = 4
 frame = 1
 
-[node name="Audio_Walk" type="AudioStreamPlayer2D" parent="."]
+[node name="Audio_Walk" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("13_i00ml")
-volume_db = 3.0
+volume_db = -24.673
 
-[node name="Audio_Attack" type="AudioStreamPlayer2D" parent="."]
+[node name="Audio_Attack" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("8_ufvvr")
 volume_db = 5.0
 
-[node name="Audio_Hurt" type="AudioStreamPlayer2D" parent="."]
+[node name="Audio_Hurt" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("10_emf0q")
 volume_db = 10.0
+
+[node name="Audio_Hit_Enemy" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("11_vmxvh")
+volume_db = 5.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -346,19 +351,35 @@ libraries = {
 }
 autoplay = "Idle"
 
-[node name="Audio_Hit_Enemy" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("11_vmxvh")
-volume_db = 5.0
-
 [node name="EnemyScanner" parent="." instance=ExtResource("12_odtc6")]
 
-[connection signal="hurt" from="Hurtbox" to="." method="_on_hurtbox_hurt"]
+[node name="StateController" type="Node" parent="."]
+script = ExtResource("13_c42po")
+
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state", "state_controller")]
+script = ExtResource("14_iekl7")
+initial_state = NodePath("PlayerDefault")
+state_controller = NodePath("../StateController")
+
+[node name="PlayerDefault" type="Node" parent="StateMachine"]
+script = ExtResource("18_fmlpe")
+
+[node name="PlayerAttack" type="Node" parent="StateMachine"]
+script = ExtResource("16_r21cm")
+
+[node name="Death" type="Node" parent="StateMachine"]
+script = ExtResource("15_el3ca")
+
+[node name="Hurt" type="Node" parent="StateMachine"]
+script = ExtResource("17_yqinc")
+owner_type = "Player"
+
+[connection signal="hurt_triggered" from="Hurtbox" to="." method="_on_hurtbox_hurt_triggered"]
 [connection signal="area_entered" from="Hitbox" to="Hitbox" method="_on_area_entered"]
 [connection signal="hit" from="Hitbox" to="." method="_on_hitbox_hit"]
-[connection signal="area_entered" from="Hitbox/Hitbox" to="Hitbox/Hitbox" method="_on_area_entered"]
-[connection signal="hit" from="Hitbox/Hitbox" to="." method="_on_hitbox_hit"]
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
+[connection signal="StateFinished" from="StateMachine" to="." method="_on_state_machine_state_finished"]
+[connection signal="StateStarted" from="StateMachine" to="." method="_on_state_machine_state_started"]
 
 [editable path="Hurtbox"]
 [editable path="Hitbox"]
-[editable path="Hitbox/Hitbox"]
